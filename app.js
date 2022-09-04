@@ -1,3 +1,4 @@
+const { errors } = require('celebrate');
 const express = require('express');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -11,4 +12,10 @@ app.listen(PORT, () => {
 });
 
 app.use(requestLogger); // подключение логгера запросов
+
 app.use(errorLogger); // подключение логгера ошибок
+app.use(errors());
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).send({ message: err.message });
+  next();
+});
