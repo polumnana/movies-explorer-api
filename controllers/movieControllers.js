@@ -63,7 +63,7 @@ module.exports.postMovies = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params.id)
     .then((movie) => {
       if (!movie) {
         next(new NotFoundError(ErrorsDescription[404]));
@@ -75,7 +75,7 @@ module.exports.deleteMovie = (req, res, next) => {
         next(new ForbidenError(ErrorsDescription[403]));
         return;
       }
-      Movie.findByIdAndRemove(req.params.movieId)
+      Movie.findByIdAndRemove(req.params.id)
         .then((removedMovie) => {
           if (!removedMovie) {
             next(new NotFoundError(ErrorsDescription[404]));
