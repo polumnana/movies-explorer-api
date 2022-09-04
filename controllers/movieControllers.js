@@ -1,4 +1,5 @@
 const Movie = require('../models/movie');
+
 const Statuses = require('../utils/statuses');
 const ErrorsDescription = require('../errors/ErrorsDescription');
 const BadRequestError = require('../errors/BadRequestError');

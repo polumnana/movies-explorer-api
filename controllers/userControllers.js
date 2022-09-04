@@ -1,9 +1,17 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
+
+const User = require('../models/user');
+
+const Statuses = require('../utils/statuses');
 const ErrorsDescription = require('../errors/ErrorsDescription');
 const NotFoundError = require('../errors/NotFoundError');
 const InternalServerError = require('../errors/InternalServerError');
 const BadRequestError = require('../errors/BadRequestError');
-const Statuses = require('../utils/statuses');
-const User = require('../models/user');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+const ConflictError = require('../errors/ConflictError');
 
 module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
@@ -41,6 +49,62 @@ module.exports.updateUserInfo = (req, res, next) => {
         next(new BadRequestError(ErrorsDescription[400]));
         return;
       }
+      next(new InternalServerError(ErrorsDescription[500]));
+    });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'arelisivx',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
+    })
+    .catch((err) => {
+      if (err.name === 'UnauthorizedError') {
+        next(new UnauthorizedError(ErrorsDescription[401]));
+        return;
+      }
+      next(new InternalServerError(ErrorsDescription[500]));
+    });
+};
+
+module.exports.createUser = (req, res, next) => {
+  const {
+    email, password, name,
+  } = req.body;
+
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({
+        email,
+        password: hash,
+        name,
+      })
+        .then((user) => {
+          res.status(Statuses.created).send({
+            email: user.email,
+            name: user.name,
+          });
+        })
+        .catch((err) => {
+          if (err.code === 11000) {
+            next(new ConflictError(ErrorsDescription[409]));
+            return;
+          }
+          if (err.name === 'ValidationError') {
+            next(new BadRequestError(ErrorsDescription[400]));
+            return;
+          }
+          next(new InternalServerError(ErrorsDescription[500]));
+        });
+    })
+    .catch(() => {
       next(new InternalServerError(ErrorsDescription[500]));
     });
 };
