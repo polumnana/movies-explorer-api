@@ -1,5 +1,6 @@
 const { errors } = require('celebrate');
 const express = require('express');
+const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const routerUsers = require('./routes/users');
@@ -11,12 +12,21 @@ const NotFoundError = require('./errors/NotFoundError');
 const { PORT = 3000 } = process.env;
 const app = express();
 
+// подключение к серверу mongo
+mongoose
+  .connect('mongodb://localhost:27017/bitfilmsdb', {
+    useNewUrlParser: true,
+  })
+  .then(() => {
+  });
+
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
 });
 
-app.use(requestLogger); // подключение логгера запросов
+// подключение логгера запросов
+app.use(requestLogger);
 
 // роуты, которым авторизация нужна
 app.use('/users', routerUsers);
@@ -27,7 +37,8 @@ app.use('*', () => {
   throw new NotFoundError({ message: 'Страницы не существует' });
 });
 
-app.use(errorLogger); // подключение логгера ошибок
+// подключение логгера ошибок
+app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
   res.status(err.statusCode).send({ message: err.message });
