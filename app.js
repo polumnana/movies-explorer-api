@@ -3,7 +3,7 @@ const express = require('express');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const routerUsers = require('./routes/users');
-// const routerMovies = require('./routes/movies');
+const routerMovies = require('./routes/movies');
 
 const NotFoundError = require('./errors/NotFoundError');
 
@@ -20,7 +20,7 @@ app.use(requestLogger); // подключение логгера запросо�
 
 // роуты, которым авторизация нужна
 app.use('/users', routerUsers);
-// app.use('/movies', routerMovies);
+app.use('/movies', routerMovies);
 
 // несуществующие роуты
 app.use('*', () => {
