@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { limiter } = require('./utils/limiter');
 
+const handleErrors = require('./errors/handleErrors');
+
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const router = require('./routes');
@@ -63,10 +65,7 @@ app.use(router);
 // подключение логгера ошибок
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => {
-  res.status(err.statusCode).send({ message: err.message });
-  next();
-});
+app.use(handleErrors);
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
