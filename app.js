@@ -16,11 +16,12 @@ const NotFoundError = require('./errors/NotFoundError');
 
 // Слушаем 3000 порт
 const PORT = process.env.PORT || 3000;
+const DB = process.env.DB || 'mongodb://localhost:27017/bitfilmsdb';
 const app = express();
 
 // подключение к серверу mongo
 mongoose
-  .connect('mongodb://localhost:27017/bitfilmsdb', {
+  .connect(DB, {
     useNewUrlParser: true,
   })
   .then(() => {
