@@ -8,3 +8,14 @@
 ## The way to run
 `npm run start` — run server  
 `npm run dev` — run server with hot-reload
+
+
+## **Public IP address**
+84.201.153.204
+
+# Backend
+https://polumnana.movies.api.nomorepartiesxyz.ru/
+
+## **Link to github**
+
+https://github.com/polumnana/movies-explorer-api
