@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { errors, celebrate, Joi } = require('celebrate');
 const express = require('express');
 const helmet = require('helmet');
@@ -33,9 +34,10 @@ app.use(requestLogger);
 
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
-  'https://polumnana.frontend.nomoredomains.sbs',
-  'http://polumnana.frontend.nomoredomains.sbs',
+  'https://polumnana.movies.nomorepartiesxyz.ru',
+  'http://polumnana.movies.nomorepartiesxyz.ru',
   'localhost:3000',
+  'localhost:3002',
 ];
 
 // eslint-disable-next-line consistent-return
