@@ -13,7 +13,7 @@ const router = require('./routes');
 
 // Слушаем 3000 порт
 const PORT = process.env.PORT || 3000;
-const DB = process.env.DB || 'mongodb://localhost:27017/bitfilmsdb';
+const DB = process.env.DB || 'mongodb://localhost:27017/moviesdb';
 const app = express();
 
 // подключение к серверу mongo
