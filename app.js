@@ -1,19 +1,13 @@
 require('dotenv').config();
-const { errors, celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const { limiter } = require('./utils/limiter');
 
-const { login, createUser } = require('./controllers/userControllers');
-
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const auth = require('./middlewares/auth');
 
-const routerUsers = require('./routes/users');
-const routerMovies = require('./routes/movies');
-
-const NotFoundError = require('./errors/NotFoundError');
+const router = require('./routes');
 
 // Слушаем 3000 порт
 const PORT = process.env.PORT || 3000;
@@ -64,33 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// роуты, не требующие авторизации
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
-
-// авторизация
-app.use(auth);
-
-// роуты, которым авторизация нужна
-app.use('/users', routerUsers);
-app.use('/movies', routerMovies);
-
-// несуществующие роуты
-app.use('*', () => {
-  throw new NotFoundError('Страницы не существует');
-});
+app.use(router);
 
 // подключение логгера ошибок
 app.use(errorLogger);
