@@ -3,6 +3,7 @@ const { errors, celebrate, Joi } = require('celebrate');
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+const { limiter } = require('./utils/limiter');
 
 const { login, createUser } = require('./controllers/userControllers');
 
@@ -28,6 +29,7 @@ mongoose
   });
 
 app.use(helmet());
+app.use(limiter);
 app.use(express.json());
 
 // подключение логгера запросов
