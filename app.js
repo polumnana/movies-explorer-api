@@ -67,8 +67,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
 
-app.listen(PORT, () => {
-  // Если всё работает, консоль покажет, какой порт приложение слушает
-  // eslint-disable-next-line no-console
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT);
