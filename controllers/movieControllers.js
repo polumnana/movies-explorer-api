@@ -2,10 +2,9 @@ const Movie = require('../models/movie');
 
 const Statuses = require('../utils/statuses');
 const ErrorsDescription = require('../errors/ErrorsDescription');
-const BadRequestError = require('../errors/BadRequestError');
-const InternalServerError = require('../errors/InternalServerError');
-const NotFoundError = require('../errors/NotFoundError');
-const ForbidenError = require('../errors/ForbiddenError');
+const {
+  BadRequestError, InternalServerError, NotFoundError, ForbiddenError,
+} = require('../errors/Errors');
 
 module.exports.getMovies = (req, res, next) => {
   const ownerMovie = req.user._id;
@@ -72,7 +71,7 @@ module.exports.deleteMovie = (req, res, next) => {
       const ownerMovie = movie.owner;
       const userId = req.user._id;
       if (ownerMovie.toString() !== userId) {
-        next(new ForbidenError(ErrorsDescription[403]));
+        next(new ForbiddenError(ErrorsDescription[403]));
         return;
       }
       Movie.findByIdAndRemove(req.params.id)

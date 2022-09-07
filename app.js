@@ -12,7 +12,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const router = require('./routes');
 
-// Слушаем 3000 порт
+// Слушаем порт
 const PORT = process.env.PORT || 3000;
 const DB = process.env.DB || 'mongodb://localhost:27017/moviesdb';
 const app = express();

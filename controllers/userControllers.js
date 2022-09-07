@@ -7,11 +7,10 @@ const User = require('../models/user');
 
 const Statuses = require('../utils/statuses');
 const ErrorsDescription = require('../errors/ErrorsDescription');
-const NotFoundError = require('../errors/NotFoundError');
-const InternalServerError = require('../errors/InternalServerError');
-const BadRequestError = require('../errors/BadRequestError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
-const ConflictError = require('../errors/ConflictError');
+
+const {
+  BadRequestError, InternalServerError, NotFoundError, UnauthorizedError, ConflictError,
+} = require('../errors/Errors');
 
 module.exports.getUserMe = (req, res, next) => {
   User.findById(req.user._id)
