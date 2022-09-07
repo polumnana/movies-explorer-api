@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const { limiter } = require('./utils/limiter');
 
+const { port, db } = require('./utils/config');
+
 const handleErrors = require('./errors/handleErrors');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -13,13 +15,11 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes');
 
 // Слушаем порт
-const PORT = process.env.PORT || 3000;
-const DB = process.env.DB || 'mongodb://localhost:27017/moviesdb';
 const app = express();
 
 // подключение к серверу mongo
 mongoose
-  .connect(DB, {
+  .connect(db, {
     useNewUrlParser: true,
   })
   .then(() => {
@@ -40,4 +40,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(handleErrors);
 
-app.listen(PORT);
+app.listen(port);

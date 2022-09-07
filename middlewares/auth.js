@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const ErrorsDescription = require('../errors/ErrorsDescription');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { jwtSecret } = require('../utils/config');
 
 module.exports = (req, res, next) => {
   // достаём заголовок авторизации
@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
 
   try {
   // попытка сделать верификацию токена
-    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'arelisivx');
+    payload = jwt.verify(token, jwtSecret);
   } catch (err) {
     // ошибка, если не получилось
     throw new UnauthorizedError(ErrorsDescription.badToken);
