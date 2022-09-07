@@ -24,12 +24,12 @@ mongoose
   .then(() => {
   });
 
+// подключение логгера запросов
+app.use(requestLogger);
+
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
-
-// подключение логгера запросов
-app.use(requestLogger);
 
 // Массив доменов, с которых разрешены кросс-доменные запросы
 const allowedCors = [
