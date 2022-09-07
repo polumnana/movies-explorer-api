@@ -1,26 +1,15 @@
-const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const auth = require('../middlewares/auth');
 const routerUsers = require('./users');
 const routerMovies = require('./movies');
 const NotFoundError = require('../errors/NotFoundError');
 const { login, createUser } = require('../controllers/userControllers');
+const { validateCreateUser, validateLogin } = require('../utils/validateRoutes');
 
 // роуты, не требующие авторизации
-router.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
+router.post('/signin', validateLogin, login);
 
-router.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().required().min(2).max(30),
-  }),
-}), createUser);
+router.post('/signup', validateCreateUser, createUser);
 
 // авторизация
 router.use(auth);
