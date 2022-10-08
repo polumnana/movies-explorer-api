@@ -9,7 +9,7 @@ const {
 module.exports.getMovies = (req, res, next) => {
   const ownerMovie = req.user._id;
 
-  Movie.find({ ownerMovie })
+  Movie.find({ owner: ownerMovie })
     .then((movies) => {
       res.status(Statuses.ok).send(movies);
     })
