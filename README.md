@@ -11,7 +11,7 @@
 
 
 ## **Public IP address**
-84.201.153.204
+84.201.139.184
 
 # Backend
 https://polumnana.movies.api.nomorepartiesxyz.ru/
